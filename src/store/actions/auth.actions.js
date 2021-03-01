@@ -104,9 +104,36 @@ export const signupUser = (user) => {
     dispatch(requestSignup());
     auth
       .createUserWithEmailAndPassword(user.email, user.password)
-      .then((user) => {
-        //   we can store the current user to the firestore later
-        dispatch(receiveSignup(user));
+      .then((data) => {
+        const currentUsr = auth.currentUser;
+
+        if (currentUsr != null) {
+          // updating display name using currentUsr
+          currentUsr
+            .updateProfile({
+              displayName: user.username,
+            })
+            .then(() => {
+              // add one new entry to the users collection
+              db.collection("users")
+                .add({
+                  username: user.username,
+                  uid: currentUsr.uid,
+                  createdAt: new Date(),
+                })
+                .then(() => {
+                  dispatch(receiveSignup(data));
+                })
+                .catch((error) => {
+                  console.log("db error", error);
+                  dispatch(signupError());
+                });
+            })
+            .catch((error) => {
+              console.log("current usr Error", error);
+              dispatch(signupError());
+            });
+        }
       })
       .catch((error) => {
         dispatch(signupError());
