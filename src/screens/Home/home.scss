@@ -1,0 +1,76 @@
+@import '../../scss/variables';
+
+.home{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    .chatList-container{
+        flex: .25;
+        background-color: $silver;
+        display: flex;
+        flex-direction: column;
+        .search-container{
+            flex: .1;
+            .form-control{
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                .form-input{
+                    background-color: $white;
+                    width: calc(100% - 25px);
+                }
+            }
+        }
+        .chatList{
+            flex: .9;
+            .chat{
+                padding-left: 6px;
+                padding-right: 6px;
+                padding-bottom: 10px;
+                padding-top: 10px;
+                border-bottom: .5px solid $lightGray;
+                display: flex;
+                align-items: center;
+                .avatar{
+                    width: 20%;
+                    .profileImg{
+                        width: 80%;
+                        border-radius: 50%;
+                    }
+                }
+                .chat-message{
+                    width: 60%;
+                    .header{
+                        font-size: .9rem;
+                        color: $black;
+                        font-weight: 700;
+                    }
+                    .last-message{
+                        font-size: .8rem;
+                        color: $gray;
+                        font-weight: 500;
+                    }
+                }
+                .chat-timer{
+                    width: 20%;
+                    p{
+                        font-size: .8rem;
+                        padding: 4px;
+                        background-color: $white;
+                        color: $gray;
+                        font-weight: 500;
+                        border-radius: 4rem;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+    .chatBody-container{
+        flex: .75;
+    }
+}
