@@ -79,9 +79,10 @@ const verifyRequest = () => {
   };
 };
 
-const verifySuccess = () => {
+const verifySuccess = (user) => {
   return {
     type: VERIFY_SUCCESS,
+    user,
   };
 };
 
@@ -91,9 +92,22 @@ export const loginUser = (user) => {
     auth
       .signInWithEmailAndPassword(user.email, user.password)
       .then((user) => {
-        dispatch(receiveLogin(user));
+        db.collection("users")
+          .doc(user.user.uid)
+          .update({
+            isOnline: true,
+            createdAt: new Date(),
+          })
+          .then(() => {
+            dispatch(receiveLogin(user));
+          })
+          .catch((error) => {
+            console.log("on update error", error);
+            dispatch(loginError());
+          });
       })
       .catch((error) => {
+        console.log("login error", error);
         dispatch(loginError());
       });
   };
@@ -116,10 +130,12 @@ export const signupUser = (user) => {
             .then(() => {
               // add one new entry to the users collection
               db.collection("users")
-                .add({
+                .doc(data.user.uid)
+                .set({
                   username: user.username,
-                  uid: currentUsr.uid,
+                  uid: data.user.uid,
                   createdAt: new Date(),
+                  isOnline: true,
                 })
                 .then(() => {
                   dispatch(receiveSignup(data));
@@ -141,15 +157,28 @@ export const signupUser = (user) => {
   };
 };
 
-export const logout = () => {
+export const logout = (uid) => {
   return async (dispatch) => {
     dispatch(requestLogout());
-    auth
-      .signOut()
+    db.collection("users")
+      .doc(uid)
+      .update({
+        isOnline: false,
+        createdAt: new Date(),
+      })
       .then(() => {
-        dispatch(receiveLogout());
+        auth
+          .signOut()
+          .then(() => {
+            dispatch(receiveLogout());
+          })
+          .catch((error) => {
+            console.log("logout error", error);
+            dispatch(logoutError());
+          });
       })
       .catch((error) => {
+        console.log("on update error", error);
         dispatch(logoutError());
       });
   };
@@ -162,7 +191,7 @@ export const verifyAuth = () => {
       if (user !== null) {
         dispatch(receiveLogin(user));
       }
-      dispatch(verifySuccess());
+      dispatch(verifySuccess(user));
     });
   };
 };

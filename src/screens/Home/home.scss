@@ -1,64 +1,100 @@
-@import '../../scss/variables';
+@import "../../scss/variables";
 
-.home{
+.home {
     width: 100%;
     height: 100vh;
     display: flex;
     flex-direction: row;
-    .chatList-container{
-        flex: .25;
+    .chatList-container {
+        flex: 0.25;
         background-color: $silver;
         display: flex;
         flex-direction: column;
-        .search-container{
-            flex: .1;
-            .form-control{
+        .profile-container {
+            display: flex;
+            padding-top: 14px;
+            padding-left: 20px;
+            padding-right: 20px;
+            align-items: center;
+            justify-content: space-between;
+            .avatar {
+                display: flex;
+                align-items: center;
+                width: 20%;
+                .profileImg {
+                    width: 60%;
+                    border-radius: 50%;
+                }
+                p {
+                    margin-left: 10px;
+                    font-size: 1.2rem;
+                    font-weight: 700;
+                    color: $black;
+                }
+            }
+            .icon-container {
+                width: 30px;
+                height: 30px;
+                background-color: $white;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                transition: all 0.3s ease-in;
+                &:active {
+                    transform: scale(0.6);
+                }
+            }
+        }
+        .search-container {
+            flex: 0.1;
+            .form-control {
                 display: flex;
                 flex-direction: row;
                 justify-content: center;
                 align-items: center;
-                padding-top: 20px;
-                padding-bottom: 20px;
-                .form-input{
+                padding-top: 10px;
+                .form-input {
                     background-color: $white;
                     width: calc(100% - 25px);
                 }
             }
         }
-        .chatList{
-            flex: .9;
-            .chat{
+        .chatList {
+            flex: 0.9;
+            .chat {
                 padding-left: 6px;
                 padding-right: 6px;
                 padding-bottom: 10px;
                 padding-top: 10px;
-                border-bottom: .5px solid $lightGray;
+                border-bottom: 0.5px solid $lightGray;
                 display: flex;
                 align-items: center;
-                .avatar{
+                .avatar {
                     width: 20%;
-                    .profileImg{
+                    .profileImg {
                         width: 80%;
                         border-radius: 50%;
                     }
                 }
-                .chat-message{
+                .chat-message {
                     width: 60%;
-                    .header{
-                        font-size: .9rem;
+                    .header {
+                        font-size: 0.9rem;
                         color: $black;
                         font-weight: 700;
                     }
-                    .last-message{
-                        font-size: .8rem;
+                    .last-message {
+                        font-size: 0.8rem;
                         color: $gray;
                         font-weight: 500;
                     }
                 }
-                .chat-timer{
+                .chat-timer {
                     width: 20%;
-                    p{
-                        font-size: .8rem;
+                    p {
+                        font-size: 0.8rem;
                         padding: 4px;
                         background-color: $white;
                         color: $gray;
@@ -70,7 +106,7 @@
             }
         }
     }
-    .chatBody-container{
-        flex: .75;
+    .chatBody-container {
+        flex: 0.75;
     }
 }

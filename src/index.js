@@ -8,6 +8,8 @@ import "./scss/style.scss";
 
 import store from "./store";
 
+window.store = store;
+
 ReactDOM.render(
   <Provider store={store}>
     <React.StrictMode>

@@ -38,7 +38,7 @@ const AuthReducer = (state = initialState, action) => {
         ...state,
         isLoggingIn: false,
         isAuthenticated: true,
-        user: action.user,
+        ...action.user,
       };
     case LOGIN_FAILURE:
       return {
@@ -60,7 +60,7 @@ const AuthReducer = (state = initialState, action) => {
         ...state,
         isLoggingIn: false,
         isAuthenticated: true,
-        user: action.user,
+        ...action.user,
       };
     case SIGNUP_FAILURE:
       return {
@@ -102,6 +102,7 @@ const AuthReducer = (state = initialState, action) => {
       return {
         ...state,
         isVerifying: false,
+        ...action.user,
       };
     default:
       return state;
