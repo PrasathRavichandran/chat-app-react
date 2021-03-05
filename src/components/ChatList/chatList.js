@@ -1,9 +1,15 @@
 import React from "react";
-import moment from 'moment';
+import moment from "moment";
 
-const ChatList = ({ profileIcon, user, lastMessage, timer }) => {
+const ChatList = ({
+  profileIcon,
+  user,
+  lastMessage,
+  timer,
+  onChatListClick,
+}) => {
   return (
-    <div className="chat">
+    <div className="chat" onClick={onChatListClick}>
       <div style={{ display: "flex" }}>
         <div className="avatar">
           <img src={profileIcon} className="profileImg" alt="profile-icon" />
@@ -15,7 +21,11 @@ const ChatList = ({ profileIcon, user, lastMessage, timer }) => {
       </div>
 
       <div className="chat-timer">
-        <p className={[timer.isOnline && 'online']}>{timer.isOnline ? "online" : moment(timer.createdAt.toDate()).fromNow()}</p>
+        <p className={[timer.isOnline && "online"]}>
+          {timer.isOnline
+            ? "online"
+            : moment(timer.createdAt.toDate()).fromNow()}
+        </p>
       </div>
     </div>
   );
