@@ -14,7 +14,11 @@ import profileIcon from "../../assets/icon.jpg";
 import { ChatList } from "../../components";
 
 import { logout } from "../../store/actions/auth.actions";
-import { getRealTimeUsers } from "../../store/actions/user.actions";
+import {
+  getRealTimeConversations,
+  getRealTimeUsers,
+  updateMessage,
+} from "../../store/actions/user.actions";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -24,21 +28,38 @@ const Home = () => {
   const [chatStarted, setChatStarted] = useState(false);
   const [userDetails, setUserDetails] = useState(null);
 
+  const [message, setMessage] = useState("");
+  const [userUid, setUserUid] = useState(null);
+
+  let unsubscribe;
+
   useEffect(() => {
     getUsers();
-  }, [user]);
+    return () => {
+      unsubscribe.then((f) => f()).catch((error) => console.log(error));
+    };
+  }, []);
 
   const onLogout = () => {
     dispatch(logout(auth.uid));
   };
 
   const getUsers = () => {
-    dispatch(getRealTimeUsers(auth?.uid));
+    unsubscribe = dispatch(getRealTimeUsers(auth?.uid))
+      .then((unsubscribe) => {
+        return unsubscribe;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const initChat = (user) => {
     setChatStarted(true);
     setUserDetails(user);
+    setUserUid(user.uid);
+
+    dispatch(getRealTimeConversations({ uid_1: auth.uid, uid_2: user.uid }));
   };
 
   useEffect(() => {
@@ -51,6 +72,18 @@ const Home = () => {
         setUserDetails(item);
       }
     });
+  };
+
+  const sendMessage = (e) => {
+    const msgObj = {
+      uid_1: auth.uid,
+      uid_2: userUid,
+      message,
+    };
+    if (message !== "") {
+      dispatch(updateMessage(msgObj));
+      setMessage("");
+    }
   };
 
   return (
@@ -119,14 +152,27 @@ const Home = () => {
                 </div>
               </div>
             </div>
-            <div className="chatBody"></div>
+            <div className="chatBody">
+              {user.conversations.map((con, index) => {
+                return (
+                  <div
+                    className={con.uid_1 === auth.uid ? "right" : "left"}
+                    key={index}
+                  >
+                    <p>{con.message}</p>
+                  </div>
+                );
+              })}
+            </div>
             <div className="chatBody-input">
               <div className="form-control">
                 <input
                   className="form-input"
                   placeholder="Type your message here.."
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
                 />
-                <div className="icon-container">
+                <div className="icon-container" onClick={(e) => sendMessage(e)}>
                   <FontAwesomeIcon icon={faPaperPlane} className="icon" />
                 </div>
               </div>
